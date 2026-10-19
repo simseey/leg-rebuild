@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>4-Week Left Leg Rebuild</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Leg Rebuild">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#EDF2F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E191D" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF2F1; --surface:#FFFFFF; --ink:#13242A; --muted:#55676D; --line:#D3DDDC;
+  --left:#0A8780; --left-soft:#D5EEEC; --warn:#B42318; --warn-soft:#FBE7E5; --amber:#A86A00; --amber-soft:#FBEFD6;
+  --figure:#13242A; --figure-other:#9AA9AE;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E191D; --surface:#15242A; --ink:#E3ECEE; --muted:#97A9AE; --line:#2A3D44;
+    --left:#3FCABF; --left-soft:#123A38; --warn:#FF8A80; --warn-soft:#3A1D1B; --amber:#F2B84B; --amber-soft:#3A2D12;
+    --figure:#E3ECEE; --figure-other:#5E7279;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E191D; --surface:#15242A; --ink:#E3ECEE; --muted:#97A9AE; --line:#2A3D44;
+  --left:#3FCABF; --left-soft:#123A38; --warn:#FF8A80; --warn-soft:#3A1D1B; --amber:#F2B84B; --amber-soft:#3A2D12;
+  --figure:#E3ECEE; --figure-other:#5E7279;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.55}
+h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;line-height:1.05;margin:0}
+a{color:var(--left)}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+p{margin:0 0 .8em;max-width:68ch}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center;padding:40px 0 28px}
+.hero h1{font-size:clamp(46px,8vw,88px);font-weight:700;letter-spacing:-.01em}
+.hero .sub{font-size:19px;color:var(--muted);margin-top:14px}
+.hero svg{width:100%;height:auto;max-height:300px}
+.key{display:flex;align-items:center;gap:10px;margin-top:18px;font-weight:500}
+.key i{display:inline-block;width:36px;height:8px;border-radius:4px;background:var(--left)}
+
+section{padding:28px 0;border-top:1px solid var(--line)}
+section>h2{font-size:38px;font-weight:700;margin-bottom:14px}
+
+.flags{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.flag{border-radius:10px;padding:16px 18px}
+.flag h3{font-size:22px;margin-bottom:6px}
+.flag ul{margin:0;padding-left:18px}
+.flag.recheck{background:var(--amber-soft)} .flag.recheck h3{color:var(--amber)}
+.flag.urgent{background:var(--warn-soft)} .flag.urgent h3{color:var(--warn)}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 28px;margin-top:8px}
+.rules div{border-left:3px solid var(--left);padding-left:12px}
+.rules b{display:block}
+
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 0;z-index:5}
+.tab{font:600 16px "Barlow",system-ui,sans-serif;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--left);outline-offset:2px}
+
+.weekhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:14px 0 8px}
+.weekhead h3{font-size:44px}
+.weekhead .goal{color:var(--muted);max-width:60ch;margin-top:6px}
+.counter{font-weight:600;font-size:15px;color:var(--left);white-space:nowrap}
+
+.ex{display:grid;grid-template-columns:230px 1fr;gap:22px;background:var(--surface);border-radius:12px;padding:18px;margin:14px 0}
+.ex .fig{background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px}
+.ex .fig svg{width:100%;height:auto}
+.ex h4{font:700 27px "Barlow Condensed",system-ui,sans-serif;margin:0}
+.ex .num{color:var(--left);margin-right:6px}
+.dose{display:inline-block;font-weight:600;background:var(--left-soft);color:var(--ink);border-radius:6px;padding:2px 10px;margin:6px 0 10px}
+.ex ol{margin:0 0 10px;padding-left:20px} .ex li{margin-bottom:4px}
+.cue{font-size:15px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin-bottom:12px}
+.actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.vid{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--left);border-radius:999px;padding:6px 14px}
+.vid svg{width:14px;height:14px;fill:currentColor}
+.done{display:inline-flex;align-items:center;gap:8px;font-weight:500;cursor:pointer;user-select:none}
+.done input{width:20px;height:20px;accent-color:var(--left)}
+
+.note{background:var(--surface);border-radius:12px;padding:16px 18px;margin:14px 0}
+.note h4{font:700 24px "Barlow Condensed",system-ui,sans-serif;margin:0 0 6px}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--surface);border-radius:10px;overflow:hidden;font-size:15px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:600;background:var(--left-soft)}
+td input{width:70px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+td input.wide{width:160px}
+
+.flight{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.flight .note{margin:0}
+.flight svg{width:100%;max-width:260px;height:auto;display:block;margin:0 auto 8px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+
+@media (max-width:720px){
+  .hero{grid-template-columns:1fr;padding-top:24px}
+  .hero svg{max-height:200px}
+  .flags,.flight{grid-template-columns:1fr}
+  .ex{grid-template-columns:1fr}
+  .ex .fig{max-width:320px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hero .lleg{stroke-dasharray:200;stroke-dashoffset:200;animation:draw 1.1s .3s ease-out forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <h1>Rebuild the left leg</h1>
+    <p class="sub">A 4-week, 10–13 minute daily routine to bring back quad strength after a lower-back nerve irritation, and get you jogging again.</p>
+    <div class="key"><i></i>Teal is your left leg in every drawing.</div>
+  </div>
+  <div id="heroFig"></div>
+</header>
+
+<section id="safety">
+  <h2>Before you start</h2>
+  <p>A back tweak followed by hip pain, quad spasm and weakness fits irritation of a nerve root around L3/L4, which supplies the quads. Pain settling while weakness lingers is common: the nerve recovers slowly, the muscle has shrunk from 10 weeks of less use, and your brain has learned to protect that leg. This programme works on all three.</p>
+  <div class="flags">
+    <div class="flag recheck">
+      <h3>Get a recheck with your GP or physio if</h3>
+      <ul>
+        <li>Strength hasn't measurably improved by the end of Week 2</li>
+        <li>The knee buckles on stairs or kerbs</li>
+        <li>Numbness or tingling in the thigh or shin is spreading</li>
+        <li>Weakness appears in the other leg or the foot</li>
+      </ul>
+    </div>
+    <div class="flag urgent">
+      <h3>Go to an emergency department now if</h3>
+      <ul>
+        <li>You have numbness in the groin or saddle area</li>
+        <li>Bladder or bowel control changes</li>
+        <li>Weakness gets rapidly worse</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <h2>How to use it</h2>
+  <div class="rules">
+    <div><b>Once a day</b>Do the main routine for the current week.</div>
+    <div><b>Top-up, up to 2 more times</b>10 quad sets, 1 wall sit, 10 sit-to-stands. About 4 minutes.</div>
+    <div><b>Effort</b>End each set able to do 2–3 more good reps. Easy two days running? Add reps, slow down, or add a backpack.</div>
+    <div><b>Symptom rule</b>Up to 3/10 discomfort is fine if it settles within 24 hours. Worse next morning? Go back a week for 2–3 days.</div>
+    <div><b>Left vs right</b>Train both legs on single-leg work. Start with the left and give it one extra set.</div>
+    <div><b>Kit</b>Chair, wall, step or stair, rolled towel, backpack. A long resistance band is optional.</div>
+  </div>
+</section>
+
+<section id="programme">
+  <h2>The programme</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="week"></div>
+</section>
+
+<section id="run">
+  <h2>Walk–jog plan</h2>
+  <p>Start when you can brisk-walk 30 minutes and do 10 single-leg box squats on the left without symptoms, usually during Week 3 or 4. Run on soft, flat ground, never on back-to-back days, at a conversational pace. Slightly shorter, quicker steps than usual (about 5–10% more per minute) reduce the load on each landing.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Stage</th><th>Session</th><th>Repeats</th><th>Move on when</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>1 min jog, 2 min walk</td><td>6</td><td>2 sessions with no symptoms next day</td></tr>
+      <tr><td>2</td><td>2 min jog, 1 min walk</td><td>6</td><td>2 sessions with no symptoms next day</td></tr>
+      <tr><td>3</td><td>4 min jog, 1 min walk</td><td>4</td><td>2 sessions with no symptoms next day</td></tr>
+      <tr><td>4</td><td>10 min continuous easy jog</td><td>1</td><td>Add 5 min per session, no more than 10% a week</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="flight">
+  <h2>On the plane</h2>
+  <p>Long sitting stiffens a recovering back, switches off a weak quad and raises blood-clot risk. Book an aisle seat, wear knee-length compression socks, drink water steadily, and put a rolled jumper behind your lower back. On travel days these sets plus one Top-up replace the main routine.</p>
+  <div class="flight">
+    <div class="note">
+      <div id="figSeated"></div>
+      <h4>Seated set, every waking hour (3 min)</h4>
+      <ol>
+        <li><b>Ankle pumps, 20.</b> Point and flex both feet briskly.</li>
+        <li><b>Seated quad lock, 10 × 10 s (left).</b> Straighten the knee as far as the seat in front allows and lock the thigh hard.</li>
+        <li><b>Seated march, 10 each.</b> Lift a knee 5–10 cm, hold 2 s.</li>
+        <li><b>Glute squeezes, 10 × 5 s.</b></li>
+        <li><b>Pelvic tilts, 10.</b> Gently arch then slump the lower back.</li>
+      </ol>
+      <a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=airplane+seat+exercises+DVT+prevention"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>Watch demos</a>
+    </div>
+    <div class="note">
+      <div id="figStanding"></div>
+      <h4>Standing set, every 2–3 hours (4 min)</h4>
+      <ol>
+        <li><b>Calf raises.</b> 20 on both legs, then 10 on the left only.</li>
+        <li><b>Mini squats, 15.</b> Quarter depth, weight shifted to the left.</li>
+        <li><b>Standing quad stretch, 30 s each.</b> Knees together, tailbone tucked.</li>
+        <li><b>Staggered-stance hip flexor stretch, 30 s each.</b></li>
+        <li><b>Standing back extensions, 10.</b> Hands on hips, lean gently back.</li>
+      </ol>
+      <a class="vid" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=standing+quad+stretch+physio"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>Watch demos</a>
+    </div>
+  </div>
+</section>
+
+<section id="tests">
+  <h2>Progress tests</h2>
+  <p>Test both legs at the start of each week, before the routine. By Week 4, aim for the left within 10% of the right. If the left hasn't improved between Week 1 and Week 3, book a recheck rather than pushing on. Entries save in this browser only.</p>
+  <ul>
+    <li><b>Single-leg sit-to-stand:</b> normal chair, arms crossed, clean reps until form breaks (max 20).</li>
+    <li><b>Single-leg wall sit:</b> knees at 90°, other foot lifted, seconds held.</li>
+    <li><b>Thigh girth:</b> 10 cm above the kneecap, quad relaxed. This lags behind strength.</li>
+  </ul>
+  <div class="scroll"><table id="tracker">
+    <thead><tr><th>Week</th><th>L sit-to-stand (reps)</th><th>R sit-to-stand (reps)</th><th>L wall sit (s)</th><th>R wall sit (s)</th><th>L thigh (cm)</th><th>R thigh (cm)</th><th>Notes</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
+<footer>General exercise guidance, not a diagnosis. Your physio can check your form on the Week 3 and 4 exercises in one session if you have an appointment left.</footer>
+</div>
+
+<script>
+/* ---------- stick-figure renderer ---------- */
+const NS='http://www.w3.org/2000/svg';
+function pl(pts){return pts.map(p=>p.join(',')).join(' ')}
+function limb(from,pts,cls){return `<polyline class="${cls}" points="${pl([from,...pts])}"/>`}
+function props(list){
+  let s='';
+  (list||[]).forEach(p=>{
+    if(p==='floor') s+=`<line x1="-40" y1="128" x2="260" y2="128" class="pr"/>`;
+    else if(p.wall!==undefined) s+=`<line x1="${p.wall}" y1="-30" x2="${p.wall}" y2="128" class="pr"/>`;
+    else if(p.box) {const [x,y,w,h]=p.box; s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="prf"/>`;}
+    else if(p.roll) {const [x,y,r]=p.roll; s+=`<circle cx="${x}" cy="${y}" r="${r}" class="prf"/>`;}
+    else if(p.chair){const [x,y,w]=p.chair; s+=`<path class="pr" d="M${x} ${y} H${x+w} M${x} ${y} V128 M${x+w} ${y} V128 M${x} ${y} V${y-40}"/>`;}
+    else if(p.seat){const [x,y,w]=p.seat; s+=`<path class="prf" d="M${x-14} ${y-70} L${x-4} ${y} H${x+w} V${y+8} H${x-8} Z"/><path class="pr" d="M${x+10} ${y+8} V128 M${x+w-6} ${y+8} V128"/>`;}
+    else if(p.band){const [a,b,c,d]=p.band; s+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="band"/>`;}
+    else if(p.post!==undefined) s+=`<line x1="${p.post}" y1="60" x2="${p.post}" y2="128" class="pr" style="stroke-width:6"/>`;
+    else if(p.arrow){const [a,b,c,d]=p.arrow; s+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="ar" marker-end="url(#ah)"/>`;}
+    else if(p.text){s+=`<text x="${p.text[0]}" y="${p.text[1]}" class="tx">${p.text[2]}</text>`;}
+  });
+  return s;
+}
+function body(f,ghost){
+  const g=ghost?' gh':'';
+  let s='';
+  const p=f.p, n=f.n;
+  if(f.ra) s+=limb(n,f.ra,'o'+g);
+  if(f.rl) s+=limb(p,f.rl,'o'+g);
+  if(n&&p) s+=`<line x1="${n[0]}" y1="${n[1]}" x2="${p[0]}" y2="${p[1]}" class="t${g}"/>`;
+  if(f.h) s+=`<circle cx="${f.h[0]}" cy="${f.h[1]}" r="9" class="hd${g}"/>`;
+  if(f.la) s+=limb(n,f.la,'a'+g);
+  if(f.ll) s+=limb(p,f.ll,'l lleg'+g);
+  return s;
+}
+function fig(f,alt){
+  const vb=f.vb||'0 -24 220 160';
+  let ghost='';
+  if(f.ghost){const gf=Object.assign({p:f.p,n:f.n},f.ghost); ghost=body(gf,true);}
+  return `<svg viewBox="${vb}" role="img" aria-label="${alt||''}" xmlns="${NS}">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+  <style>
+   .pr{stroke:var(--muted);stroke-width:2.5;fill:none;stroke-linecap:round}
+   .prf{fill:var(--line);stroke:var(--muted);stroke-width:1.5}
+   .band{stroke:var(--amber);stroke-width:3;stroke-dasharray:6 4}
+   .ar{stroke:var(--muted);stroke-width:2;fill:none}
+   .tx{font:600 11px Barlow,sans-serif;fill:var(--muted)}
+   polyline,line.t{fill:none;stroke-linecap:round;stroke-linejoin:round}
+   .t{stroke:var(--figure);stroke-width:7}
+   .hd{fill:var(--figure)}
+   .a{stroke:var(--figure);stroke-width:6}
+   .o{stroke:var(--figure-other);stroke-width:6}
+   .l{stroke:var(--left);stroke-width:8}
+   .gh{opacity:.35;stroke-dasharray:4 5}
+   circle.gh{fill:none;stroke:var(--figure);stroke-width:2}
+  </style>
+  ${props(f.props)}${ghost}${body(f)}</svg>`;
+}
+
+/* ---------- poses (floor at y=128; left leg = ll) ---------- */
+const F={
+ run:{vb:'20 -4 180 140',h:[120,18],n:[117,30],p:[110,70],la:[[104,50],[94,62]],ra:[[128,44],[138,32]],ll:[[134,90],[130,118],[142,120]],rl:[[98,96],[76,102],[72,110]],props:['floor']},
+ slider:{vb:'10 50 200 86',h:[40,104],n:[53,106],p:[100,108],la:[[78,98],[104,90]],ra:[[48,118],[36,114]],ll:[[130,98],[108,88],[103,82]],rl:[[126,116],[104,124],[96,124]],
+   ghost:{ll:[[132,104],[162,106],[166,100]]},props:['floor',{arrow:[150,86,124,82]}]},
+ hipflex:{vb:'30 -6 160 140',h:[115,22],n:[112,36],p:[110,80],la:[[108,16],[106,-2]],ra:[[126,56],[116,72]],ll:[[92,124],[64,126],[56,127]],rl:[[140,84],[140,126],[152,127]],props:['floor',{arrow:[118,96,134,96]}]},
+ quadset:{vb:'30 50 160 86',h:[64,72],n:[70,84],p:[82,122],la:[[62,104],[58,124]],ra:[[66,104],[62,124]],ll:[[116,118],[152,121],[156,111]],rl:[[110,100],[134,126],[144,127]],props:['floor',{roll:[116,124,4]}]},
+ shortarc:{vb:'30 50 170 86',h:[64,72],n:[70,84],p:[82,122],la:[[62,104],[58,124]],ra:[[66,104],[62,124]],ll:[[114,111],[150,104],[154,95]],
+   ghost:{ll:[[114,111],[136,126],[146,127]]},props:['floor',{roll:[114,120,8]},{arrow:[140,124,152,110]}]},
+ slr:{vb:'10 56 190 80',h:[28,112],n:[42,116],p:[90,120],la:[[62,123],[80,125]],ra:[[62,123],[80,125]],ll:[[121,108],[152,96],[155,86]],rl:[[112,98],[130,126],[140,127]],
+   ghost:{ll:[[122,124],[154,124],[158,116]]},props:['floor',{arrow:[166,120,164,98]}]},
+ wallsit:{vb:'20 -4 150 140',h:[49,34],n:[49,46],p:[50,90],la:[[58,68],[74,84]],ra:[[58,68],[74,84]],ll:[[86,90],[86,126],[98,127]],rl:[[90,88],[96,126],[108,127]],props:['floor',{wall:40}]},
+ wallsitSL:{vb:'20 -4 150 140',h:[49,34],n:[49,46],p:[50,90],la:[[58,68],[74,84]],ra:[[58,68],[74,84]],ll:[[86,90],[86,126],[98,127]],rl:[[92,88],[104,118],[112,127]],props:['floor',{wall:40}]},
+ bridge:{vb:'10 50 170 86',h:[31,114],n:[44,118],p:[90,96],la:[[64,124],[82,126]],ra:[[64,124],[82,126]],ll:[[122,84],[128,126],[138,127]],rl:[[118,86],[122,126],[132,127]],
+   ghost:{p:[90,122],ll:[[118,96],[128,126]]},props:['floor',{arrow:[90,118,90,102]}]},
+ bridgeSL:{vb:'10 40 170 96',h:[31,114],n:[44,118],p:[90,96],la:[[64,124],[82,126]],ra:[[64,124],[82,126]],ll:[[122,84],[128,126],[138,127]],rl:[[100,68],[122,64],[130,58]],props:['floor']},
+ sts:{vb:'40 -6 140 140',h:[102,22],n:[99,34],p:[90,76],la:[[110,52],[126,54]],ra:[[110,52],[126,54]],ll:[[94,102],[88,126],[100,127]],rl:[[100,100],[104,126],[116,127]],
+   ghost:{h:[76,52],n:[78,64],p:[74,92],ll:[[104,92],[100,126]],rl:[[106,90],[108,126]]},props:[{chair:[58,92,32]},'floor']},
+ split:{vb:'40 -6 150 140',h:[110,24],n:[110,36],p:[110,80],la:[[106,58],[104,78]],ra:[[114,58],[116,78]],ll:[[140,92],[138,126],[150,127]],rl:[[102,120],[78,118],[72,127]],props:['floor',{arrow:[92,96,92,112]}]},
+ stepup:{vb:'60 -26 150 160',h:[124,4],n:[122,16],p:[118,58],la:[[130,36],[138,52]],ra:[[112,36],[108,52]],ll:[[140,76],[136,100],[148,100]],rl:[[112,90],[104,120],[114,124]],props:[{box:[120,100,70,28]},'floor']},
+ balance:{vb:'40 -6 140 140',h:[110,18],n:[110,30],p:[110,70],la:[[90,40],[72,44]],ra:[[130,40],[148,44]],ll:[[110,98],[110,126],[122,127]],rl:[[126,88],[118,110],[126,112]],props:['floor']},
+ calf:{vb:'50 -26 140 160',h:[106,-10],n:[106,2],p:[106,42],la:[[118,18],[134,10]],ra:[[118,18],[134,10]],ll:[[106,70],[106,98],[116,106]],rl:[[110,72],[112,100],[122,106]],props:[{box:[86,106,40,22]},'floor',{wall:140}]},
+ bss:{vb:'20 -6 160 140',h:[110,28],n:[108,40],p:[100,80],la:[[104,60],[106,80]],ra:[[104,60],[106,80]],ll:[[128,86],[126,126],[138,127]],rl:[[90,120],[66,98],[56,100]],props:[{box:[26,100,44,28]},'floor']},
+ stepdown:{vb:'60 -14 120 148',h:[108,8],n:[106,20],p:[98,58],la:[[122,36],[138,40]],ra:[[122,36],[138,40]],ll:[[118,76],[110,98],[122,100]],rl:[[124,90],[138,122],[148,124]],props:[{box:[80,100,48,28]},'floor']},
+ kneedrive:{vb:'50 -6 130 140',h:[110,18],n:[110,30],p:[110,70],la:[[122,48],[132,36]],ra:[[98,48],[92,62]],ll:[[112,98],[110,126],[122,127]],rl:[[136,66],[134,94],[144,96]],props:['floor']},
+ rdl:{vb:'20 20 170 116',h:[154,76],n:[140,72],p:[100,70],la:[[140,90],[138,108]],ra:[[140,90],[138,108]],ll:[[104,98],[102,126],[114,127]],rl:[[72,70],[46,68],[44,76]],props:['floor']},
+ boxsquat:{vb:'30 10 140 126',h:[96,40],n:[92,52],p:[78,90],la:[[108,62],[124,64]],ra:[[108,62],[124,64]],ll:[[108,90],[106,126],[118,127]],rl:[[106,84],[132,80],[136,72]],props:[{box:[44,92,36,36]},'floor']},
+ spanish:{vb:'40 10 160 126',h:[98,40],n:[96,52],p:[88,92],la:[[110,64],[126,66]],ra:[[110,64],[126,66]],ll:[[118,94],[118,126],[130,127]],rl:[[122,92],[122,126],[134,127]],props:['floor',{post:180},{band:[120,93,180,93]}]},
+ pogo:{vb:'60 -14 100 148',h:[110,6],n:[110,18],p:[110,58],la:[[98,36],[100,52]],ra:[[122,36],[120,52]],ll:[[108,84],[110,108],[116,114]],rl:[[112,84],[114,108],[120,114]],props:['floor',{arrow:[86,96,86,120]},{arrow:[134,120,134,96]}]},
+ hopstick:{vb:'30 -6 150 140',h:[124,28],n:[120,40],p:[110,78],la:[[138,52],[150,50]],ra:[[100,52],[88,56]],ll:[[122,100],[116,126],[128,127]],rl:[[98,98],[82,104],[78,110]],props:['floor',{arrow:[40,110,84,110]}]},
+ seated:{vb:'30 -4 160 140',h:[86,44],n:[86,56],p:[90,96],la:[[96,78],[110,90]],ra:[[96,78],[110,90]],ll:[[120,94],[150,100],[154,90]],rl:[[118,92],[118,126],[128,127]],props:[{seat:[70,100,46]},'floor']},
+ quadstretch:{vb:'60 -6 120 140',h:[110,18],n:[110,30],p:[110,70],la:[[100,52],[96,80]],ra:[[132,40],[150,42]],ll:[[110,100],[96,82],[92,76]],rl:[[110,98],[110,126],[122,127]],props:['floor',{wall:150}]},
+ march:{vb:'50 -6 130 140',h:[110,18],n:[110,30],p:[110,70],la:[[122,48],[132,36]],ra:[[98,48],[92,62]],ll:[[112,98],[110,126],[122,127]],rl:[[136,66],[134,94],[144,96]],props:['floor']}
+};
+
+/* ---------- programme data ---------- */
+const yt=q=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+const WEEKS=[
+ {name:'Week 1',title:'Wake it up',time:'about 12 min',goal:'Calm the nerve, switch the quad back on, and get it working under light load. Most of the work is holding, which is the best way to override the leg’s protective shut-down.',ex:[
+  {id:'w1-slider',name:'Side-lying femoral nerve slider',dose:'2 × 10, left side up',fig:'slider',steps:['Lie on your right side, right knee bent, head on a pillow. Hold your left ankle (or loop a towel around it).','Tuck your chin while letting the left knee straighten slightly forward.','Then lift your head to look up while drawing the left heel back toward your bum and the thigh slightly behind you.','Keep it smooth, about 2 seconds each way.'],cue:'At most a mild stretch. Any tingling should fade within seconds. This glides the nerve; it isn’t a stretch.',q:'side lying femoral nerve glide physio'},
+  {id:'w1-hip',name:'Half-kneeling hip flexor stretch',dose:'2 × 30 s, left knee down',fig:'hipflex',steps:['Kneel on your left knee on a cushion, right foot forward.','Tuck your tailbone under and squeeze your left glute.','Shift your hips forward until you feel a stretch at the front of the left hip. Reach your left arm overhead to deepen it.'],cue:'Keep the lower back neutral. If it arches, you lose the stretch.',q:'half kneeling hip flexor stretch physio'},
+  {id:'w1-qset',name:'Quad set',dose:'10 × 10 s holds',fig:'quadset',steps:['Sit with legs straight and a rolled towel under your left knee.','Push the back of the knee down into the towel as hard as you can so the kneecap pulls up and the heel lifts slightly.','Hold 10 s, relax 3 s.'],cue:'Fingers on the inner thigh just above the knee. You want it rock hard. Compare with the right.',q:'quad set exercise towel under knee'},
+  {id:'w1-sarc',name:'Short-arc quad',dose:'2 × 15, 3 s hold at top',fig:'shortarc',steps:['Same position with a bigger roll (or foam roller) under the left knee so it bends about 30°.','Straighten the knee fully and lock the thigh. Hold 3 s.','Lower over 3 s.'],cue:'The last few degrees of straightening are the hardest and most important.',q:'short arc quad exercise'},
+  {id:'w1-slr',name:'Straight leg raise',dose:'2 × 10',fig:'slr',steps:['Lie on your back, right knee bent, left leg straight.','Lock the left quad first, then lift the leg to the height of the right knee.','Hold 2 s, lower slowly.'],cue:'If the knee bends as you lift, the quad isn’t locked. Reset and squeeze harder.',q:'straight leg raise quad lock physio'},
+  {id:'w1-wall',name:'Wall sit, weight shifted left',dose:'3 × 30 s, 30 s rest',fig:'wallsit',steps:['Back against a wall, slide down until knees are bent 60–90°.','Move the right foot slightly forward so about two-thirds of your weight is on the left.','Hold.'],cue:'The single best exercise this week.',q:'wall sit isometric knee rehab'},
+  {id:'w1-bridge',name:'Glute bridge',dose:'2 × 12',fig:'bridge',steps:['On your back, knees bent, feet hip-width.','Squeeze your glutes and lift until shoulders, hips and knees line up.','Hold 2 s, lower.'],cue:'Lift with the glutes, not by arching the lower back.',q:'glute bridge form physio'},
+  {id:'w1-sts',name:'Chair sit-to-stand, left-biased',dose:'2 × 10',fig:'sts',steps:['Sit on a firm chair with the left foot slightly behind the right.','Stand up without using your hands.','Sit down slowly over 3 s.'],cue:'Left knee tracks over the second toe. Don’t let it cave in.',q:'sit to stand exercise physio'}
+ ]},
+ {name:'Week 2',title:'Build control',time:'about 12 min',goal:'Move from two legs to one, and from holding to moving.',ex:[
+  {id:'w2-slider',name:'Nerve slider + hip flexor stretch',dose:'1 × 10, then 30 s stretch',fig:'slider',steps:['Do the slider as in Week 1.','Follow with one 30 s half-kneeling hip flexor stretch on the left.'],cue:'Your warm-up for the rest of the session.',q:'side lying femoral nerve glide physio'},
+  {id:'w2-wall',name:'Single-leg-biased wall sit',dose:'3 × 30–45 s',fig:'wallsitSL',steps:['Set up as in Week 1.','Lift the right heel so that foot barely touches the floor.','Put 80–90% of your weight through the left.'],cue:'Add 5 s per hold when the last one feels manageable.',q:'single leg wall sit'},
+  {id:'w2-split',name:'Split squat',dose:'3 × 10 left forward, 2 × 10 right',fig:'split',steps:['Long stride, left foot forward, back heel up. Hold a wall if needed.','Drop the back knee straight down over 3 s.','Drive up through the front heel.'],cue:'The front knee can travel past the toes. That loads the quad, which is the point.',q:'split squat form physio'},
+  {id:'w2-step',name:'Step-up',dose:'3 × 10 left, 2 × 10 right',fig:'stepup',steps:['Put the whole left foot on a 20–30 cm step.','Lean slightly forward and push through the left leg to stand tall.','Step down slowly with the right leg.'],cue:'Don’t push off the bottom foot. Keep the right toes light.',q:'step up exercise knee rehab'},
+  {id:'w2-bridge',name:'Single-leg glute bridge',dose:'2 × 10 each, left first',fig:'bridgeSL',steps:['Bridge set-up, then hug the right knee toward your chest.','Push through the left heel to lift.','Keep the hips level.'],cue:'If the hamstring cramps, bring the left heel closer to your bum.',q:'single leg glute bridge'},
+  {id:'w2-bal',name:'Single-leg balance',dose:'3 × 30 s on the left',fig:'balance',steps:['Stand on the left leg, knee soft.','Progress: eyes open, then slow head turns, then eyes closed near a wall.','Move up a level when you can hold 30 s without touching down.'],cue:'Nerve irritation dulls balance. This retrains it.',q:'single leg balance progression physio'},
+  {id:'w2-calf',name:'Single-leg calf raise',dose:'2 × 15 each',fig:'calf',steps:['Stand on a step edge on one leg, fingertips on a wall.','Rise as high as you can.','Lower over 3 s to below step level.'],cue:'Calves take a big share of running load. Don’t skip these.',q:'single leg calf raise off step'}
+ ]},
+ {name:'Week 3',title:'Load it',time:'about 13 min',goal:'Heavier single-leg strength and slow lowering, which is what the quad does every time your foot lands when running. If legs are still sore next day (over 3/10), do the Week 1 routine that day.',ex:[
+  {id:'w3-warm',name:'Warm-up',dose:'2 min',fig:'march',steps:['10 leg swings forward and back each leg.','10 bodyweight squats.','30 s half-kneeling hip flexor stretch on the left.'],cue:'Easy pace. You’re just getting blood flowing.',q:'leg swings warm up runners'},
+  {id:'w3-bss',name:'Bulgarian split squat',dose:'3 × 8 left, 2 × 8 right',fig:'bss',steps:['Back foot laces-down on a chair or couch, front foot a long stride ahead.','Lower over 3 s until the front thigh is near parallel. Pause 1 s.','Drive up through the front foot.'],cue:'Add a backpack once 3 × 8 feels controlled.',q:'bulgarian split squat form physio'},
+  {id:'w3-sd',name:'Eccentric step-down',dose:'3 × 8 left, 2 × 8 right',fig:'stepdown',steps:['Stand on a step on the left leg, right foot hanging off the front.','Bend the left knee over 4 s until the right heel lightly taps the floor.','Stand back up.'],cue:'Left knee stays over the second toe, hips level. If the knee dives in, use a lower step.',q:'eccentric step down knee'},
+  {id:'w3-knee',name:'Reverse lunge to knee drive',dose:'2 × 10 each, left standing first',fig:'kneedrive',steps:['Step the right foot back into a lunge.','Drive up through the left leg and bring the right knee to hip height.','Balance for 1 s, then repeat.'],cue:'This links strength to the running action.',q:'reverse lunge to knee drive'},
+  {id:'w3-rdl',name:'Single-leg Romanian deadlift',dose:'2 × 8 each',fig:'rdl',steps:['Stand on the left leg, knee soft.','Hinge at the hips, reaching toward the floor as the right leg extends behind you.','Stand by squeezing the left glute.'],cue:'Flat back, hips square. A fingertip on the wall is fine.',q:'single leg RDL bodyweight form'},
+  {id:'w3-box',name:'Single-leg box squat',dose:'3 × 5 left, 2 × 5 right',fig:'boxsquat',steps:['Sit on a high surface like a bed edge.','Lift the right foot and stand up on the left leg only.','Sit down as slowly as you can.'],cue:'When 5 are easy, lower the seat.',q:'single leg box squat progression'},
+  {id:'w3-calf',name:'Single-leg calf raise',dose:'2 × 15 each',fig:'calf',steps:['As Week 2.'],cue:'Hold a backpack if 15 is easy.',q:'single leg calf raise off step'}
+ ]},
+ {name:'Week 4',title:'Return to run',time:'about 13 min',goal:'Add springiness and impact so the leg can handle jogging. Hop readiness check first: 10 single-leg box squats on the left from normal chair height and a 30 s eyes-closed balance, both pain-free. Not there yet? Repeat Week 3 and add the Spanish squat.',ex:[
+  {id:'w4-warm',name:'Dynamic warm-up',dose:'2 min',fig:'march',steps:['20 m slow high-knee marching.','10 leg swings each way.','10 walking lunges.'],cue:'Build up gradually before the hops.',q:'high knee march warm up'},
+  {id:'w4-bss',name:'Bulgarian split squat, loaded',dose:'3 × 6–8 left, 2 × 6–8 right',fig:'bss',steps:['Backpack on.','Same 3 s lowering as Week 3.'],cue:'Heavier and fewer reps builds more strength.',q:'bulgarian split squat backpack'},
+  {id:'w4-sd',name:'Tempo step-down',dose:'2 × 10 each',fig:'stepdown',steps:['As Week 3, but lower over 2 s.','Stand back up quickly.'],cue:'Trains the quick switch from landing to pushing off.',q:'step down exercise tempo'},
+  {id:'w4-span',name:'Spanish squat',dose:'3 × 30 s (needs a band)',fig:'spanish',steps:['Loop a heavy band around a post at knee height and behind both knees. Step back until it’s tight.','Sit back into a squat with shins vertical and chest tall.','Hold.'],cue:'Loads the quads hard with very little knee stress. Skip if you have no band.',q:'spanish squat band isometric'},
+  {id:'w4-pogo',name:'Pogo hops',dose:'2 × 20 two legs, then 3 × 10 left, 2 × 10 right',fig:'pogo',steps:['Small, quick bounces on the balls of your feet, knees nearly straight.','Think skipping rope.','Aim for quiet landings.'],cue:'Stop if the left knee wobbles or symptoms rise.',q:'pogo hops plyometric runners'},
+  {id:'w4-hop',name:'Forward hop and stick',dose:'2 × 5 each',fig:'hopstick',steps:['From the left leg, hop forward about half a stride.','Land on the left and freeze for 2 s, knee over toes.','Increase distance only when landings are steady.'],cue:'Quality over distance.',q:'single leg hop and stick landing'},
+  {id:'w4-calf',name:'Single-leg calf raise',dose:'2 × 20 each',fig:'calf',steps:['As Week 2, now 20 reps.'],cue:'Running ready calves.',q:'single leg calf raise off step'}
+ ]}
+];
+
+/* ---------- storage helpers ---------- */
+function localDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const today=localDate();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&localDate()!==today)location.reload()});
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let done=load('llr:done:'+today,[]);
+let current=load('llr:week',0);
+
+/* ---------- render ---------- */
+document.getElementById('heroFig').innerHTML=fig(F.run,'Runner with the left leg highlighted');
+document.getElementById('figSeated').innerHTML=fig(F.seated,'Seated quad lock in a plane seat');
+document.getElementById('figStanding').innerHTML=fig(F.quadstretch,'Standing quad stretch holding a wall');
+
+const tabs=document.getElementById('tabs');
+WEEKS.forEach((w,i)=>{
+  const b=document.createElement('button');
+  b.className='tab';b.setAttribute('role','tab');b.id='tab'+i;
+  b.textContent=w.name+': '+w.title;
+  b.addEventListener('click',()=>{current=i;save('llr:week',i);renderWeek()});
+  tabs.appendChild(b);
+});
+
+function renderWeek(){
+  const w=WEEKS[current];
+  [...tabs.children].forEach((b,i)=>b.setAttribute('aria-selected',i===current));
+  const n=w.ex.filter(e=>done.includes(e.id)).length;
+  let html=`<div class="weekhead"><div><h3>${w.name}: ${w.title}</h3><p class="goal">${w.goal}</p></div><div class="counter" id="counter">${n} of ${w.ex.length} done today · ${w.time}</div></div>`;
+  w.ex.forEach((e,i)=>{
+    html+=`<article class="ex">
+      <div class="fig">${fig(F[e.fig],e.name)}</div>
+      <div>
+        <h4><span class="num">${i+1}</span>${e.name}</h4>
+        <span class="dose">${e.dose}</span>
+        <ol>${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+        <div class="cue">${e.cue}</div>
+        <div class="actions">
+          <a class="vid" target="_blank" rel="noopener" href="${yt(e.q)}"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>Watch demos</a>
+          <label class="done"><input type="checkbox" data-id="${e.id}" ${done.includes(e.id)?'checked':''}>Done today</label>
+        </div>
+      </div></article>`;
+  });
+  if(current===0){
+    html+=`<div class="note"><h4>Top-up, any week (4 min)</h4><p>10 quad sets, 1 wall sit hold, 10 sit-to-stands. Do it up to twice more a day: at your desk, after long meetings, or before a walk.</p></div>`;
+  }
+  document.getElementById('week').innerHTML=html;
+  document.querySelectorAll('#week input[type=checkbox]').forEach(cb=>cb.addEventListener('change',()=>{
+    const id=cb.dataset.id;
+    done=cb.checked?[...new Set([...done,id])]:done.filter(x=>x!==id);
+    save('llr:done:'+today,done);
+    const c=WEEKS[current].ex.filter(e=>done.includes(e.id)).length;
+    document.getElementById('counter').textContent=`${c} of ${WEEKS[current].ex.length} done today · ${WEEKS[current].time}`;
+  }));
+}
+renderWeek();
+
+/* ---------- tracker ---------- */
+const tests=load('llr:tests',{});
+const rows=['1','2','3','4','End'], cols=['ls','rs','lw','rw','lt','rt','note'];
+const tb=document.querySelector('#tracker tbody');
+rows.forEach(r=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${r}</td>`+cols.map(c=>`<td><input ${c==='note'?'class="wide"':'inputmode="decimal"'} aria-label="Week ${r} ${c}" data-k="${r}-${c}" value="${(tests[r+'-'+c]||'').replace(/"/g,'&quot;')}"></td>`).join('');
+  tb.appendChild(tr);
+});
+tb.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;tests[k]=e.target.value;save('llr:tests',tests)});
+</script>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+</script>
+</body>
+</html>
